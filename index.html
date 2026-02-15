@@ -3,49 +3,132 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Send me a message</title>
+<title>DM Me!</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <style>
+  /* 4K background */
   body {
-    font-family: Arial, sans-serif;
-    background: #2c2f33;
+    margin: 0;
+    font-family: 'Inter', Arial, sans-serif;
+    background: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=3840&q=80') no-repeat center center fixed;
+    background-size: cover;
     color: #fff;
     display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: center;
+    align-items: center;
     height: 100vh;
   }
-  input, textarea, button {
-    margin: 5px;
-    padding: 10px;
-    border-radius: 5px;
+
+  /* Discord DM card */
+  .dm-card {
+    background: rgba(44, 47, 51, 0.85);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    width: 400px;
+    max-width: 90%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    animation: fadeIn 1s ease;
+    backdrop-filter: blur(6px);
+  }
+
+  /* Header with profile */
+  .header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .profile-pic {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+    border: 2px solid #7289da;
+  }
+
+  .profile-name {
+    font-weight: 600;
+    font-size: 18px;
+  }
+
+  h2 {
+    font-weight: 600;
+    margin: 10px 0;
+    text-align: center;
+  }
+
+  /* Message input area */
+  textarea {
+    width: 100%;
+    padding: 12px;
+    border-radius: 12px;
     border: none;
-    width: 300px;
+    font-size: 14px;
+    outline: none;
+    resize: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    transition: background 0.3s;
   }
+
+  textarea::placeholder {
+    color: #ccc;
+  }
+
+  textarea:focus {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  /* Send button */
   button {
-    background-color: #7289da;
+    margin-top: 12px;
+    padding: 12px;
+    border-radius: 12px;
+    border: none;
+    width: 100%;
+    background: linear-gradient(90deg, #7289da, #5b6eae);
     color: white;
+    font-weight: 600;
     cursor: pointer;
+    transition: all 0.3s ease;
   }
+
   button:hover {
-    background-color: #5b6eae;
+    transform: scale(1.05);
+    background: linear-gradient(90deg, #5b6eae, #7289da);
+  }
+
+  #status {
+    margin-top: 10px;
+    font-size: 14px;
+    text-align: center;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px);}
+    to { opacity: 1; transform: translateY(0);}
   }
 </style>
 </head>
 <body>
 
-<h2>Send me a message</h2>
-<input type="text" id="name" placeholder="Your name (optional)">
-<textarea id="message" placeholder="Your message" rows="5"></textarea>
-<button onclick="sendMessage()">Send</button>
-
-<p id="status"></p>
+<div class="dm-card">
+  <div class="header">
+    <img class="profile-pic" src="https://cdn.discordapp.com/avatars/YOUR_DISCORD_ID/YOUR_AVATAR.png?size=128" alt="Your Profile">
+    <div class="profile-name">YourName</div>
+  </div>
+  <h2>Send me a DM</h2>
+  <textarea id="message" placeholder="Type your message here..." rows="5"></textarea>
+  <button onclick="sendMessage()">Send</button>
+  <p id="status"></p>
+</div>
 
 <script>
-  const webhookURL = "https://discord.com/api/webhooks/1472675351762305106/zrGmmYVIa4m8BxGQlvbeRxwCh-_elbgR_u8kSsXFrnox2YpXwNreeCmpXWuER0bf6bIt"; // ⚠️ Replace with your webhook
+  const webhookURL = "https://discord.com/api/webhooks/1472675351762305106/zrGmmYVIa4m8BxGQlvbeRxwCh-_elbgR_u8kSsXFrnox2YpXwNreeCmpXWuER0bf6bIt";
 
   async function sendMessage() {
-    const name = document.getElementById("name").value || "Anonymous";
     const message = document.getElementById("message").value;
 
     if (!message) {
@@ -57,13 +140,10 @@
       await fetch(webhookURL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          content: `**${name}** says: ${message}`
-        })
+        body: JSON.stringify({ content: `**Anonymous** says: ${message}` })
       });
 
       document.getElementById("status").innerText = "Message sent! ✅";
-      document.getElementById("name").value = "";
       document.getElementById("message").value = "";
     } catch (err) {
       document.getElementById("status").innerText = "Failed to send message ❌";
