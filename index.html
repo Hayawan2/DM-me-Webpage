@@ -16,7 +16,7 @@
     height: 100vh;
     overflow: hidden;
     background: black; /* Start black for fade-in */
-    animation: fadeInPage 1s ease forwards; /* Fade-in the whole page */
+    animation: fadeInPage 1s ease forwards;
   }
 
   /* Full-screen video */
@@ -45,32 +45,10 @@
     animation: fadeInCard 1s ease;
   }
 
-  .header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 16px;
-  }
-
-  .profile-pic {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    margin-right: 15px;
-    border: 2px solid #7289da;
-    object-fit: cover;
-  }
-
-  .profile-name {
-    font-weight: 600;
-    font-size: 18px;
-  }
-
-  h2 {
-    font-weight: 600;
-    margin: 10px 0 16px 0;
-    text-align: center;
-  }
-
+  .header { display: flex; align-items: center; margin-bottom: 16px; }
+  .profile-pic { width: 50px; height: 50px; border-radius: 50%; margin-right: 15px; border: 2px solid #7289da; object-fit: cover; }
+  .profile-name { font-weight: 600; font-size: 18px; }
+  h2 { font-weight: 600; margin: 10px 0 16px 0; text-align: center; }
   textarea {
     width: 100%;
     padding: 16px;
@@ -86,14 +64,8 @@
     margin-bottom: 8px;
     min-height: 80px;
   }
-
-  textarea::placeholder {
-    color: #ccc;
-  }
-
-  textarea:focus {
-    background: rgba(255, 255, 255, 0.2);
-  }
+  textarea::placeholder { color: #ccc; }
+  textarea:focus { background: rgba(255, 255, 255, 0.2); }
 
   button {
     margin-top: 12px;
@@ -108,34 +80,15 @@
     transition: all 0.3s ease;
     box-sizing: border-box;
   }
+  button:hover { transform: scale(1.02); background: linear-gradient(90deg, #5b6eae, #7289da); }
+  #status { margin-top: 12px; font-size: 14px; text-align: center; min-height: 20px; }
 
-  button:hover {
-    transform: scale(1.02);
-    background: linear-gradient(90deg, #5b6eae, #7289da);
-  }
-
-  #status {
-    margin-top: 12px;
-    font-size: 14px;
-    text-align: center;
-    min-height: 20px;
-  }
-
-  /* Fade-in animations */
-  @keyframes fadeInPage {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  @keyframes fadeInCard {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+  @keyframes fadeInPage { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes fadeInCard { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 </style>
 </head>
 <body>
 
-<!-- Video background -->
 <video autoplay muted loop id="bg-video">
   <source src="background.mp4" type="video/mp4">
   Your browser does not support the video tag.
@@ -153,7 +106,7 @@
 </div>
 
 <script>
-  // Render server endpoint (no webhook exposed)
+  // Correct Render server endpoint
   const serverURL = "https://message-button-page.onrender.com/send-message";
 
   async function sendMessage() {
@@ -165,14 +118,20 @@
     }
 
     try {
-      await fetch(serverURL, {
+      const res = await fetch(serverURL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: "Hayawaan", message })
       });
 
-      document.getElementById("status").innerText = "Message sent! ✅";
-      document.getElementById("message").value = "";
+      const data = await res.json();
+      if (data.success) {
+        document.getElementById("status").innerText = "Message sent! ✅";
+        document.getElementById("message").value = "";
+      } else {
+        document.getElementById("status").innerText = "Failed to send message ❌";
+        console.error(data.error);
+      }
     } catch (err) {
       document.getElementById("status").innerText = "Failed to send message ❌";
       console.error(err);
@@ -182,5 +141,3 @@
 
 </body>
 </html>
-
-
