@@ -3,7 +3,7 @@ const fetch = require('node-fetch');
 const app = express();
 app.use(express.json());
 
-const WEBHOOK = 'YOUR_DISCORD_WEBHOOK_URL'; // keep this private
+const WEBHOOK = 'https://discord.com/api/webhooks/1472675351762305106/zrGmmYVIa4m8BxGQlvbeRxwCh-_elbgR_u8kSsXFrnox2YpXwNreeCmpXWuER0bf6bIt'; // keep this private
 
 app.post('/send-message', async (req, res) => {
   const { message, name } = req.body;
@@ -24,3 +24,4 @@ app.post('/send-message', async (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
