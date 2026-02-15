@@ -15,6 +15,8 @@
     align-items: center;
     height: 100vh;
     overflow: hidden;
+    background: black; /* Start black for fade-in */
+    animation: fadeInPage 1s ease forwards; /* Fade-in the whole page */
   }
 
   /* Full-screen video */
@@ -32,21 +34,21 @@
     background: rgba(44, 47, 51, 0.9);
     border-radius: 20px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-    width: 500px; /* Reduced from 400px */
+    width: 500px;
     max-width: 95%;
-    padding: 24px 32px; /* More vertical padding, less horizontal */
+    padding: 24px 32px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    animation: fadeIn 1s ease;
     backdrop-filter: blur(6px);
     box-sizing: border-box;
+    animation: fadeInCard 1s ease;
   }
 
   .header {
     display: flex;
     align-items: center;
-    margin-bottom: 16px; /* Increased spacing */
+    margin-bottom: 16px;
   }
 
   .profile-pic {
@@ -65,13 +67,13 @@
 
   h2 {
     font-weight: 600;
-    margin: 10px 0 16px 0; /* Increased bottom margin */
+    margin: 10px 0 16px 0;
     text-align: center;
   }
 
   textarea {
     width: 100%;
-    padding: 16px; /* Increased padding */
+    padding: 16px;
     border-radius: 12px;
     border: none;
     font-size: 14px;
@@ -82,7 +84,7 @@
     transition: background 0.3s;
     box-sizing: border-box;
     margin-bottom: 8px;
-    min-height: 80px; /* Taller textarea */
+    min-height: 80px;
   }
 
   textarea::placeholder {
@@ -94,7 +96,7 @@
   }
 
   button {
-    margin-top: 12px; /* Increased spacing */
+    margin-top: 12px;
     padding: 14px;
     border-radius: 12px;
     border: none;
@@ -113,15 +115,21 @@
   }
 
   #status {
-    margin-top: 12px; /* Increased spacing */
+    margin-top: 12px;
     font-size: 14px;
     text-align: center;
     min-height: 20px;
   }
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-20px);}
-    to { opacity: 1; transform: translateY(0);}
+  /* Fade-in animations */
+  @keyframes fadeInPage {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes fadeInCard {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 </style>
 </head>
@@ -139,13 +147,14 @@
     <div class="profile-name">Hayawaan</div>
   </div>
   <h2>Send me a DM</h2>
-  <textarea id="message" placeholder="Type your message here..." rows="4"></textarea> <!-- Increased rows -->
+  <textarea id="message" placeholder="Type your message here..." rows="4"></textarea>
   <button onclick="sendMessage()">Send</button>
   <p id="status"></p>
 </div>
 
 <script>
-  const webhookURL = "https://discord.com/api/webhooks/1472675351762305106/zrGmmYVIa4m8BxGQlvbeRxwCh-_elbgR_u8kSsXFrnox2YpXwNreeCmpXWuER0bf6bIt";
+  // Render server endpoint (no webhook exposed)
+  const serverURL = "https://your-render-url.onrender.com/send-message";
 
   async function sendMessage() {
     const message = document.getElementById("message").value;
@@ -156,10 +165,10 @@
     }
 
     try {
-      await fetch(webhookURL, {
+      await fetch(serverURL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content: `**Anonymous** says: ${message}` })
+        body: JSON.stringify({ name: "Hayawaan", message })
       });
 
       document.getElementById("status").innerText = "Message sent! ✅";
